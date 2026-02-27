@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ayush's Link Hub</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0a0f;
+    --surface: #12121a;
+    --card: #1a1a26;
+    --accent: #6c63ff;
+    --accent2: #ff6584;
+    --accent3: #43e97b;
+    --text: #f0f0ff;
+    --muted: #888899;
+    --border: rgba(108,99,255,0.2);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* Animated background */
+  body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(ellipse at 20% 20%, rgba(108,99,255,0.08) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 80%, rgba(255,101,132,0.06) 0%, transparent 50%),
+                radial-gradient(ellipse at 50% 50%, rgba(67,233,123,0.04) 0%, transparent 60%);
+    animation: bgShift 15s ease-in-out infinite alternate;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  @keyframes bgShift {
+    0% { transform: translate(0,0) rotate(0deg); }
+    100% { transform: translate(2%, 2%) rotate(3deg); }
+  }
+
+  /* Header */
+  header {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    padding: 60px 20px 40px;
+  }
+
+  .hero-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, rgba(108,99,255,0.2), rgba(255,101,132,0.2));
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    padding: 6px 20px;
+    font-size: 12px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 20px;
+    animation: fadeDown 0.8s ease both;
+  }
+
+  h1 {
+    font-family: 'Syne', sans-serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 800;
+    line-height: 1.1;
+    margin-bottom: 16px;
+    animation: fadeDown 0.8s 0.1s ease both;
+    background: linear-gradient(135deg, #fff 0%, #6c63ff 50%, #ff6584 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .subtitle {
+    font-size: 1rem;
+    color: var(--muted);
+    animation: fadeDown 0.8s 0.2s ease both;
+    margin-bottom: 10px;
+  }
+
+  .creator {
+    font-size: 0.9rem;
+    color: var(--accent2);
+    font-weight: 500;
+    animation: fadeDown 0.8s 0.3s ease both;
+    letter-spacing: 1px;
+  }
+
+  @keyframes fadeDown {
+    from { opacity: 0; transform: translateY(-20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Search */
+  .search-wrap {
+    position: relative;
+    z-index: 10;
+    max-width: 500px;
+    margin: 30px auto 50px;
+    padding: 0 20px;
+    animation: fadeUp 0.8s 0.4s ease both;
+  }
+
+  .search-wrap input {
+    width: 100%;
+    padding: 14px 20px 14px 50px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--text);
+    font-family: 'DM Sans', sans-serif;
+    font-size: 15px;
+    outline: none;
+    transition: all 0.3s;
+  }
+
+  .search-wrap input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 20px rgba(108,99,255,0.3);
+  }
+
+  .search-wrap::before {
+    content: '🔍';
+    position: absolute;
+    left: 36px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 16px;
+    pointer-events: none;
+  }
+
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Category filter */
+  .categories {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0 20px;
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 10;
+    animation: fadeUp 0.8s 0.5s ease both;
+  }
+
+  .cat-btn {
+    padding: 8px 18px;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 50px;
+    color: var(--muted);
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.3s;
+    font-family: 'DM Sans', sans-serif;
+  }
+
+  .cat-btn:hover, .cat-btn.active {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: #fff;
+    transform: translateY(-2px);
+    box-shadow: 0 8px 20px rgba(108,99,255,0.4);
+  }
+
+  /* Grid */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+    gap: 16px;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 20px 80px;
+    position: relative;
+    z-index: 10;
+  }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 20px 16px;
+    text-align: center;
+    text-decoration: none;
+    color: var(--text);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    animation: cardIn 0.5s ease both;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, transparent, rgba(108,99,255,0.05));
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+
+  .card:hover::before { opacity: 1; }
+
+  .card:hover {
+    transform: translateY(-8px) scale(1.03);
+    border-color: var(--accent);
+    box-shadow: 0 20px 40px rgba(108,99,255,0.25);
+  }
+
+  .card img {
+    width: 52px;
+    height: 52px;
+    object-fit: contain;
+    border-radius: 12px;
+    transition: transform 0.3s;
+  }
+
+  .card:hover img {
+    transform: scale(1.1) rotate(-3deg);
+  }
+
+  .card-name {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--text);
+    line-height: 1.3;
+  }
+
+  .card-cat {
+    font-size: 10px;
+    color: var(--muted);
+    background: rgba(108,99,255,0.1);
+    padding: 2px 8px;
+    border-radius: 20px;
+  }
+
+  @keyframes cardIn {
+    from { opacity: 0; transform: translateY(20px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+  }
+
+  .card.hidden { display: none; }
+
+  /* Footer */
+  footer {
+    text-align: center;
+    padding: 20px;
+    color: var(--muted);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    position: relative;
+    z-index: 10;
+  }
+
+  footer span { color: var(--accent2); }
+
+  /* Floating particles */
+  .particle {
+    position: fixed;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: var(--accent);
+    pointer-events: none;
+    animation: float linear infinite;
+    opacity: 0.4;
+    z-index: 1;
+  }
+
+  @keyframes float {
+    0% { transform: translateY(100vh) scale(0); opacity: 0; }
+    10% { opacity: 0.4; }
+    90% { opacity: 0.4; }
+    100% { transform: translateY(-10vh) scale(1); opacity: 0; }
+  }
+ 
+  
+</style>
+</head>
+<body>
+
+<!-- Particles -->
+<script>
+  for(let i = 0; i < 15; i++) {
+    const p = document.createElement('div');
+    p.className = 'particle';
+    p.style.left = Math.random()*100 + 'vw';
+    p.style.animationDuration = (8 + Math.random()*12) + 's';
+    p.style.animationDelay = (Math.random()*10) + 's';
+    p.style.background = ['#6c63ff','#ff6584','#43e97b'][Math.floor(Math.random()*3)];
+    document.body.appendChild(p);
+  }
+</script>
+
+<header>
+  <div class="hero-badge">⚡ All Links Hub</div>
+  <h1>
+   Ayush Link hub 
+    </h1>
+  <p class="subtitle">50 Popular Websites — One Place</p>
+  <p class="creator">✨ This website is created by <strong>Ayush Kumar</strong> with help of HTML, CSS & JavaScript</p>
+</header>
+
+<div class="search-wrap">
+  <input type="text" id="searchInput" placeholder="Search websites..." oninput="filterCards()">
+</div>
+
+<div class="categories">
+  <button class="cat-btn active" onclick="filterCat('all', this)">All</button>
+  <button class="cat-btn" onclick="filterCat('Video', this)">📺 Video</button>
+  <button class="cat-btn" onclick="filterCat('Social', this)">💬 Social</button>
+  <button class="cat-btn" onclick="filterCat('Payment', this)">💳 Payment</button>
+  <button class="cat-btn" onclick="filterCat('Shopping', this)">🛒 Shopping</button>
+  <button class="cat-btn" onclick="filterCat('Tech', this)">💻 Tech</button>
+  <button class="cat-btn" onclick="filterCat('News', this)">📰 News</button>
+  <button class="cat-btn" onclick="filterCat('Education', this)">📚 Education</button>
+  <button class="cat-btn" onclick="filterCat('Music', this)">🎵 Music</button>
+</div>
+
+<div class="grid" id="grid">
+</div>
+
+<footer>
+<div style="display:inline-block; position:relative;">
+  <img src="ayush.jpeg"
+       style="
+         width:300px;
+         height:auto;
+         border-radius:15px;
+         cursor:pointer;
+         transition:0.3s ease;
+       "
+       ondblclick="
+         for(let i=0;i<10;i++){
+           let star=document.createElement('span');
+
+           // random RGB color
+           let r=Math.floor(Math.random()*256);
+           let g=Math.floor(Math.random()*256);
+           let b=Math.floor(Math.random()*256);
+           let color=`rgb(${r},${g},${b})`;
+
+           star.innerHTML='★';
+           star.style.position='absolute';
+           star.style.left=(Math.random()*100)+'%';
+           star.style.top=(Math.random()*100)+'%';
+           star.style.fontSize=(14+Math.random()*20)+'px';
+           star.style.color=color;
+           star.style.pointerEvents='none';
+
+           // strong glow
+           star.style.textShadow=
+             `0 0 6px ${color},
+              0 0 12px ${color},
+              0 0 24px ${color}`;
+
+           star.style.animation='starGlow 1.3s ease-out forwards';
+
+           this.parentElement.appendChild(star);
+           setTimeout(()=>star.remove(),1300);
+         }
+
+         // image glow also random
+         let ir=Math.floor(Math.random()*256);
+         let ig=Math.floor(Math.random()*256);
+         let ib=Math.floor(Math.random()*256);
+         this.style.boxShadow=
+           `0 0 25px rgb(${ir},${ig},${ib}),
+            0 0 55px rgb(${ir},${ig},${ib})`;
+       ">
+</div>
+
+<style>
+@keyframes starGlow{
+  0%{
+    opacity:1;
+    transform:scale(0.4) rotate(0deg);
+  }
+  100%{
+    opacity:0;
+    transform:scale(2) translateY(-35px) rotate(220deg);
+  }
+}
+</style>
+  <p>Made with ❤️ by <span>Ayush Kumar</span> | HTML + CSS + JavaScript</p>
+</footer>
+
+<script>
+const sites = [
+  { name: "YouTube", url: "https://youtube.com", icon: "https://www.google.com/s2/favicons?domain=youtube.com&sz=64", cat: "Video" },
+  { name: "Google Chrome", url: "https://google.com", icon: "https://www.google.com/s2/favicons?domain=google.com&sz=64", cat: "Tech" },
+  { name: "PhonePe", url: "https://phonepe.com", icon: "https://www.google.com/s2/favicons?domain=phonepe.com&sz=64", cat: "Payment" },
+  { name: "Paytm", url: "https://paytm.com", icon: "https://www.google.com/s2/favicons?domain=paytm.com&sz=64", cat: "Payment" },
+  { name: "Google Pay", url: "https://pay.google.com", icon: "https://www.google.com/s2/favicons?domain=pay.google.com&sz=64", cat: "Payment" },
+  { name: "Facebook", url: "https://facebook.com", icon: "https://www.google.com/s2/favicons?domain=facebook.com&sz=64", cat: "Social" },
+  { name: "Instagram", url: "https://instagram.com", icon: "https://www.google.com/s2/favicons?domain=instagram.com&sz=64", cat: "Social" },
+  { name: "WhatsApp", url: "https://web.whatsapp.com", icon: "https://www.google.com/s2/favicons?domain=whatsapp.com&sz=64", cat: "Social" },
+  { name: "Twitter / X", url: "https://x.com", icon: "https://www.google.com/s2/favicons?domain=x.com&sz=64", cat: "Social" },
+  { name: "Amazon", url: "https://amazon.in", icon: "https://www.google.com/s2/favicons?domain=amazon.in&sz=64", cat: "Shopping" },
+  { name: "Flipkart", url: "https://flipkart.com", icon: "https://www.google.com/s2/favicons?domain=flipkart.com&sz=64", cat: "Shopping" },
+  { name: "Meesho", url: "https://meesho.com", icon: "https://www.google.com/s2/favicons?domain=meesho.com&sz=64", cat: "Shopping" },
+  { name: "Snapchat", url: "https://snapchat.com", icon: "https://www.google.com/s2/favicons?domain=snapchat.com&sz=64", cat: "Social" },
+  { name: "Telegram", url: "https://web.telegram.org", icon: "https://www.google.com/s2/favicons?domain=telegram.org&sz=64", cat: "Social" },
+  { name: "Netflix", url: "https://netflix.com", icon: "https://www.google.com/s2/favicons?domain=netflix.com&sz=64", cat: "Video" },
+  { name: "Hotstar", url: "https://hotstar.com", icon: "https://www.google.com/s2/favicons?domain=hotstar.com&sz=64", cat: "Video" },
+  { name: "Amazon Prime", url: "https://primevideo.com", icon: "https://www.google.com/s2/favicons?domain=primevideo.com&sz=64", cat: "Video" },
+  { name: "Spotify", url: "https://spotify.com", icon: "https://www.google.com/s2/favicons?domain=spotify.com&sz=64", cat: "Music" },
+  { name: "JioSaavn", url: "https://jiosaavn.com", icon: "https://www.google.com/s2/favicons?domain=jiosaavn.com&sz=64", cat: "Music" },
+  { name: "Gaana", url: "https://gaana.com", icon: "https://www.google.com/s2/favicons?domain=gaana.com&sz=64", cat: "Music" },
+  { name: "LinkedIn", url: "https://linkedin.com", icon: "https://www.google.com/s2/favicons?domain=linkedin.com&sz=64", cat: "Social" },
+  { name: "GitHub", url: "https://github.com", icon: "https://www.google.com/s2/favicons?domain=github.com&sz=64", cat: "Tech" },
+  { name: "Reddit", url: "https://reddit.com", icon: "https://www.google.com/s2/favicons?domain=reddit.com&sz=64", cat: "Social" },
+  { name: "Wikipedia", url: "https://wikipedia.org", icon: "https://www.google.com/s2/favicons?domain=wikipedia.org&sz=64", cat: "Education" },
+  { name: "Stack Overflow", url: "https://stackoverflow.com", icon: "https://www.google.com/s2/favicons?domain=stackoverflow.com&sz=64", cat: "Tech" },
+  { name: "Google Maps", url: "https://maps.google.com", icon: "https://www.google.com/s2/favicons?domain=maps.google.com&sz=64", cat: "Tech" },
+  { name: "Gmail", url: "https://mail.google.com", icon: "https://www.google.com/s2/favicons?domain=mail.google.com&sz=64", cat: "Tech" },
+  { name: "Google Drive", url: "https://drive.google.com", icon: "https://www.google.com/s2/favicons?domain=drive.google.com&sz=64", cat: "Tech" },
+  { name: "Microsoft", url: "https://microsoft.com", icon: "https://www.google.com/s2/favicons?domain=microsoft.com&sz=64", cat: "Tech" },
+  { name: "Bing", url: "https://bing.com", icon: "https://www.google.com/s2/favicons?domain=bing.com&sz=64", cat: "Tech" },
+  { name: "Myntra", url: "https://myntra.com", icon: "https://www.google.com/s2/favicons?domain=myntra.com&sz=64", cat: "Shopping" },
+  { name: "Nykaa", url: "https://nykaa.com", icon: "https://www.google.com/s2/favicons?domain=nykaa.com&sz=64", cat: "Shopping" },
+  { name: "Zomato", url: "https://zomato.com", icon: "https://www.google.com/s2/favicons?domain=zomato.com&sz=64", cat: "Shopping" },
+  { name: "Swiggy", url: "https://swiggy.com", icon: "https://www.google.com/s2/favicons?domain=swiggy.com&sz=64", cat: "Shopping" },
+  { name: "Ola", url: "https://olacabs.com", icon: "https://www.google.com/s2/favicons?domain=olacabs.com&sz=64", cat: "Tech" },
+  { name: "Uber", url: "https://uber.com", icon: "https://www.google.com/s2/favicons?domain=uber.com&sz=64", cat: "Tech" },
+  { name: "MakeMyTrip", url: "https://makemytrip.com", icon: "https://www.google.com/s2/favicons?domain=makemytrip.com&sz=64", cat: "Shopping" },
+  { name: "IRCTC", url: "https://irctc.co.in", icon: "https://www.google.com/s2/favicons?domain=irctc.co.in&sz=64", cat: "Shopping" },
+  { name: "Times of India", url: "https://timesofindia.com", icon: "https://www.google.com/s2/favicons?domain=timesofindia.com&sz=64", cat: "News" },
+  { name: "NDTV", url: "https://ndtv.com", icon: "https://www.google.com/s2/favicons?domain=ndtv.com&sz=64", cat: "News" },
+  { name: "Aaj Tak", url: "https://aajtak.in", icon: "https://www.google.com/s2/favicons?domain=aajtak.in&sz=64", cat: "News" },
+  { name: "BBC News", url: "https://bbc.com", icon: "https://www.google.com/s2/favicons?domain=bbc.com&sz=64", cat: "News" },
+  { name: "BYJU'S", url: "https://byjus.com", icon: "https://www.google.com/s2/favicons?domain=byjus.com&sz=64", cat: "Education" },
+  { name: "Unacademy", url: "https://unacademy.com", icon: "https://www.google.com/s2/favicons?domain=unacademy.com&sz=64", cat: "Education" },
+  { name: "Coursera", url: "https://coursera.org", icon: "https://www.google.com/s2/favicons?domain=coursera.org&sz=64", cat: "Education" },
+  { name: "Khan Academy", url: "https://khanacademy.org", icon: "https://www.google.com/s2/favicons?domain=khanacademy.org&sz=64", cat: "Education" },
+  { name: "Pinterest", url: "https://pinterest.com", icon: "https://www.google.com/s2/favicons?domain=pinterest.com&sz=64", cat: "Social" },
+  { name: "Quora", url: "https://quora.com", icon: "https://www.google.com/s2/favicons?domain=quora.com&sz=64", cat: "Social" },
+  { name: "ShareChat", url: "https://sharechat.com", icon: "https://www.google.com/s2/favicons?domain=sharechat.com&sz=64", cat: "Social" },
+  { name: "Josh", url: "https://josh.in", icon: "https://www.google.com/s2/favicons?domain=josh.in&sz=64", cat: "Video" },
+];
+
+let currentCat = 'all';
+
+function buildGrid(data) {
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  data.forEach((site, i) => {
+    const a = document.createElement('a');
+    a.className = 'card';
+    a.href = site.url;
+    a.target = '_blank';
+    a.rel = 'noopener';
+    a.dataset.cat = site.cat;
+    a.dataset.name = site.name.toLowerCase();
+    a.style.animationDelay = (i * 0.03) + 's';
+    a.innerHTML = `
+      <img src="${site.icon}" alt="${site.name}" onerror="this.src='https://via.placeholder.com/52x52/6c63ff/fff?text=${site.name[0]}'">
+      <div class="card-name">${site.name}</div>
+      <div class="card-cat">${site.cat}</div>
+    `;
+    grid.appendChild(a);
+  });
+}
+
+buildGrid(sites);
+
+function filterCat(cat, btn) {
+  currentCat = cat;
+  document.querySelectorAll('.cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterCards();
+}
+
+function filterCards() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.card').forEach(card => {
+    const matchCat = currentCat === 'all' || card.dataset.cat === currentCat;
+    const matchSearch = card.dataset.name.includes(q);
+    card.classList.toggle('hidden', !(matchCat && matchSearch));
+  });
+}
+</script>
+</body>
+</html>
